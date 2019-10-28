@@ -2,7 +2,13 @@ Option Explicit
 
 dim oShell, oFSO, dangerousExes, exe, cmdHardCodedHash, cmdDynamicHash, strComputerName, strUserName, strLogFilePath, strSafeDate, _
  strSafeTime, strDateTime, strLogFileName, strEventInfo, objLogFile, cmdHashCache, objCmdHashCache, dangerHashCache, _
- dangerHashData, mailFile, objDangerHashCache, oFile
+ dangerHashData, mailFile, objDangerHashCache, oFile, strAppFilePath
+
+'----------
+'Environment Specific Variables
+strLogFilePath = "\\server\Logs"
+strAppFilePath = "\\server\scripts"
+'----------
 
 Set oShell = WScript.CreateObject("WScript.Shell")
 Set oFSO = CreateObject("Scripting.FileSystemObject")
@@ -11,7 +17,6 @@ cmdHardCodedHash = "db 06 c3 53 49 64 e3 fc 79 d2 76 31 44 ba 53 74 2d 7f a2 50 
 cmdDynamicHash = ""
 strComputerName = oShell.ExpandEnvironmentStrings("%COMPUTERNAME%")
 strUserName = oShell.ExpandEnvironmentStrings("%USERNAME%")
-strLogFilePath = "\\server\Logs"
 strSafeDate = DatePart("yyyy",Date) & Right("0" & DatePart("m",Date), 2) & Right("0" & DatePart("d",Date), 2)
 strSafeTime = Right("0" & Hour(Now), 2) & Right("0" & Minute(Now), 2) & Right("0" & Second(Now), 2)
 strDateTime = strSafeDate & "-" & strSafeTime
@@ -99,7 +104,7 @@ End Function
 
 'A function for running SendMail.
 Function sendEmail() 
-  oShell.run "cmd /c sendmail.exe " & mailFile, 0, TRUE
+  oShell.run "cmd /c " & strAppFilePath & "\sendmail.exe " & mailFile, 0, TRUE
 End Function
 
 'A function to display a warning message to the user and kill the machine after a specified time.
